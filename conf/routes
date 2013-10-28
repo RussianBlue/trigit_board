@@ -1,0 +1,33 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                        controllers.Application.main
+
+GET      /login                                  controllers.Login.login
+POST     /login                                  controllers.Login.authenticate
+GET      /logout                                 controllers.Login.logout
+
+GET      /board/:category/page=:page             controllers.Boards.list(category:String, page:Long)
+
+GET      /board/:category/new                    controllers.Boards.newBoard(category:String)
+
+# Create
+POST     /board/:category/create/                controllers.Boards.create(category:String)
+
+# READ
+GET      /board/:category/:id                    controllers.Boards.readBoard(id:Long, category:String)
+GET      /board/:category/:id/edit               controllers.Boards.editBoard(id:Long, category:String)
+
+# Edit
+POST     /board/update                           controllers.Boards.update(id:Long)
+
+# Delete
+DELETE   /board/:category/:id/delete             controllers.Boards.remove(id:Long, category:String)
+
+# Javascript routing
+GET     /assets/javascripts/routes               controllers.Application.javascriptRoutes
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

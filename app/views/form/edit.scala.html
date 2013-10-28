@@ -1,0 +1,43 @@
+@(form: Form[(String, String)], boards:Board, category:String, title:String)
+
+<div class="page-header">
+    <h3>@title</h3>
+</div>
+
+@helper.form(routes.Boards.update(boards.id.get), 'class -> "form-horizontal", 'rule -> "form"){
+    <div class="form-group">
+        <label for="title" class="col-lg-1 control-label">제목</label>
+        <div class="col-lg-11">
+            <input type="input" class="form-control" name="title" value="@boards.title" width="100px">
+        </div>
+    </div>
+    <p class="default-line"></p>
+    <div class="form-group">
+        <label for="name" class="col-lg-1 control-label">이름</label>
+        <label for="name-body" class="col-lg-1 control-label">@boards.name</label>
+        <label for="email" class="col-lg-2 control-label">이메일</label>
+        <label for="name-body" class="col-lg-1 control-label">@boards.email</label>
+    </div>
+    <p class="default-line"></p>
+    <div class="form-group">
+        <label for="file" class="col-lg-1 control-label">파일</label>
+        <div class="col-lg-9">
+            <label for="file_path" class="col-lg-1 control-label">@boards.clip_file_name</label>
+        </div>
+        <div class="col-lg-2">
+            <a href="#" class="btn btn-warning">찾아보기</a>
+        </div>
+    </div>
+    <p class="default-line"></p>
+    <div class="form-group">
+        <label for="body" class="col-lg-1 control-label">내용</label>
+        <div class="col-lg-11">
+            <textarea name="body" class="form-control" rows="10">
+               @boards.body
+            </textarea>
+        </div>
+    </div>
+    <div class="board-save">
+        <a href="#" class="btn btn-success update" id="@category @boards.id.get">수정하기</a>
+    </div>
+}

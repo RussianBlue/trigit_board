@@ -1,0 +1,48 @@
+@(form: Form[(String, String)])(implicit flash: Flash)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>로그인페이지</title>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("bootstrap/css/bootstrap.theme.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/signin.css")">
+
+    <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("bootstrap/js/bootstrap.min.js")" type="text/javascript"></script>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <!-- container -->
+    <div class="singin">
+         <!-- Login Form -->
+         @helper.form(routes.Login.authenticate, 'class -> "form-signin") {
+            <h2 class="form-signin-heading">트리짓 소프트웨어 <br> 공정관리 게시판</h2>
+            E-Mail :
+            <input type="email" class="form-control" placeholder="E-mail" name="email" id="email" autofocus value="@form("email").value">
+            Password :
+            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+            <input type="checkbox" value="remember-me"> 아이디 기억하기
+            <button id="btn-login" class="btn btn-lg btn-success btn-block" type="submit">로그인</button>
+            <p></p>
+            @form.globalError.map { error =>
+            <p class="error alert alert-danger">
+                @error.message
+            </p>
+            }
+
+            @flash.get("success").map { message =>
+            <p class="success alert alert-success">
+                @message
+            </p>
+            }
+            <!-- Login Form -->
+        }
+    </div>
+    <!-- /container -->
+</body>
+</html>

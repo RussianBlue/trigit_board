@@ -1,0 +1,37 @@
+@(boards:Board, category:String)
+
+<div class="page-header">
+    <h3>@boards.title</h3>
+</div>
+
+<div class="page-body">
+    <table class="table table-bordered">
+        <tr>
+            <td class="read-td-naming">작성자</td>
+            <td>@boards.name</td>
+            <td class="read-td-naming">이메일</td>
+            <td colspan="3">@boards.email</td>
+        </tr>
+        <tr>
+            <td class="read-td-naming">파일</td>
+            <td>
+                @if(!boards.clip_file_name.isEmpty){
+                    <span class="glyphicon glyphicon-save btn-download" id="@boards.clip_file_name">@boards.clip_file_name</span>
+                }
+            </td>
+            <td class="read-td-naming">날짜</td>
+            <td>@boards.created_at</td>
+            <td class="read-td-naming">조회수</td>
+            <td>@boards.readings</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                @boards.body
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="board-save">
+    <a href="@routes.Boards.editBoard(boards.id.get, category)" class="btn btn-warning">수정하기</a>
+    <a href="#" class="btn btn-danger remove" id="@category @boards.id.get">삭제하기</a>
+</div>

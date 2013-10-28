@@ -1,0 +1,42 @@
+@(form: Form[(String, String)], user:User, category:String, title:String)
+
+<div class="page-header">
+    <h3>@title <small></small></h3>
+</div>
+
+@helper.form(routes.Boards.create(category), 'id-> "board_create", 'class -> "form-horizontal", 'rule -> "form", 'enctype -> "multipart/form-data"){
+    <div class="form-group">
+        <label for="title" class="col-lg-1 control-label">제목</label>
+        <div class="col-lg-11">
+            <input type="input" class="form-control" name="title" placeholder="제목을 입력해 주세요." width="100px">
+        </div>
+    </div>
+    <p class="default-line"></p>
+    <div class="form-group">
+        <label for="name" class="col-lg-1 control-label">이름</label>
+        <label for="name-body" class="col-lg-1 control-label">@user.name</label>
+        <label for="email" class="col-lg-2 control-label">이메일</label>
+        <label for="name-body" class="col-lg-1 control-label">@user.email</label>
+    </div>
+    <p class="default-line"></p>
+    <div class="form-group">
+        <label for="file" class="col-lg-1 control-label">파일</label>
+        <div class="col-lg-9">
+            <input class="form-control fileName" id="disabledInput" type="text" disabled>
+        </div>
+        <div class="col-lg-2">
+            <input class="clip_file_hide hide" type="file" name="clip_file_name" id="clip_file_name">
+            <a href="#" class="btn btn-warning file-search">찾아보기</a>
+        </div>
+    </div>
+    <p class="default-line"></p>
+    <div class="form-group">
+        <label for="content" class="col-lg-1 control-label">내용</label>
+        <div class="col-lg-11">
+            <textarea name="content" class="form-control" rows="10"></textarea>
+        </div>
+    </div>
+    <div class="board-save">
+        <button type="submit" class="btn btn-success create" id="create">저장하기</button>
+    </div>
+}

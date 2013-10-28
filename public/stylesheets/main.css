@@ -1,0 +1,114 @@
+@font-face{
+    font-family:ng;
+    src:url(NanumGothic.eot)
+}
+
+body{
+}
+
+#main-container{
+    padding-left:20px;
+    padding-right:20px;
+}
+
+#main-container .col-md-1{
+    padding:0px;
+    width:1%;
+}
+
+#left-container{
+
+}
+
+#body-container{
+
+}
+
+#body-container h4{
+    font-weight: bold;
+}
+
+div.board-bottom{
+    border-radius: 5px;
+    background:#CCCCCC;
+}
+
+div.board-btn{
+    text-align: right;
+}
+
+div.board-pagenavigation{
+    text-align: center;
+}
+/* 게시판 테이블 */
+td.table-number{
+    width:10%;
+    max-width:10%;
+    text-align: center;
+}
+
+td.table-name{
+    width:10%;
+    max-width:10%;
+    text-align: center;
+}
+td.table-title{
+    width:50%;
+    max-width:50%;
+    text-align: left;
+}
+td.table-file{
+    width:10%;
+    max-width:10%;
+    text-align: center;
+}
+td.table-date{
+    width:10%;
+    max-width:10%;
+    text-align: center;
+}
+td.table-read{
+    width:10%;
+    max-width:10%;
+    text-align: center;
+}
+
+div.board-date{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+h4.project-list{
+    font-weight: bold;
+}
+
+p.default-line{
+    height:1px;
+    width:100%;
+    background: #666666;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+/* board */
+div.board-save{
+    text-align: right;
+}
+
+span.glyphicon.glyphicon-save.btn-download{
+    cursor:pointer;
+}
+
+td.read-td-naming{
+    color:#FFFFFF;
+    background: #555555;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* footer */
+
+div.bottom-center{
+    text-align: center;
+}

@@ -1,0 +1,79 @@
+@(boards: Seq[Board], user:User, category:String, count:Long, page:Long, pageLength:Long)
+
+@prev() = @{
+  if(page > 1){ link(page -1) }else{ link(1) }
+}
+@next() = @{
+    if(page < (count/pageLength + 1)){   link(page + 1)   }else{   link(page)  }
+}
+@startPage() = @{
+  1
+}
+
+@link(newPage: Long) = @{
+    routes.Boards.list(category, newPage)
+}
+
+@tableNumber(newIndex:Int) = @{
+    count - newIndex - ((page-1) * pageLength)
+}
+
+@totalPage() = @{
+    (count/pageLength + 1) toInt
+}
+<div class="page-header">
+    <h3>게시판 <small> | @category</small></h3>
+</div>
+<div class="board-table">
+    <table class="table table-bordered table-hover">
+        <tr class="warning">
+            <td class="table-number">No</td>
+            <td class="table-title">공지내용</td>
+            <td class="table-name">글쓴이</td>
+            <td class="table-file">파일</td>
+            <td class="table-date">날짜</td>
+            <td class="table-read">조회수</td>
+        </tr>
+            @for(i <- boards.indices) {
+                    <tr>
+                    <td class="table-number">
+                        @tableNumber(i)
+                    </td>
+                    <td class="table-title"><a href="@routes.Boards.readBoard(boards(i).id.get, category)">@boards(i).title</a></td>
+                    <td class="table-name">@boards(i).name</td>
+                    <td class="table-file">
+                        @if(!boards(i).clip_file_name.isEmpty) {
+                            <a href="#"><span class="glyphicon glyphicon-save"></span></a>
+                        }
+                    </td>
+                    <td class="table-date">
+                        <div class="board-date">
+                            <span class="">@boards(i).created_at</span>
+                        </div>
+                    </td>
+                    <td class="table-read">@boards(i).readings</td>
+                </tr>
+
+        }
+    </table>
+</div>
+
+<div class="board-btn">
+    <a href="@routes.Boards.newBoard(category)" class="btn btn-primary">글쓰기</a>
+    <a href="" class="btn btn-primary">프린트</a>
+</div>
+@if(count > pageLength){
+    <div class="board-pagenavigation">
+        <ul class="pagination">
+            <li><a href="@prev()">Prev</a></li>
+            @for(i <- startPage() to totalPage()) {
+                @if(i == page){
+                    <li class="active"><a href="@link(i)">@i</a></li>
+                }else{
+                    <li><a href="@link(i)">@i</a></li>
+                }
+            }
+            <li><a href="@next()">Next</a></li>
+        </ul>
+    </div>
+}
