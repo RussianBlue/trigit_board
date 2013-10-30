@@ -5,9 +5,7 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 
-import play.api.libs.{ Comet }
-import play.api.libs.iteratee._
-import play.api.libs.concurrent._
+import play.api.libs._
 
 import java.util._
 import java.text._
@@ -37,7 +35,7 @@ object Boards extends Controller with Secured {
   val writeForm = Form(
     tuple(
       "title" -> text,
-      "body" -> text
+      "content" -> text
     )
   )
   //보드타입 체크
@@ -87,16 +85,23 @@ object Boards extends Controller with Secured {
     }.getOrElse(Forbidden)
   }
 
-  def create(category:String) = IsAuthenticated = { username => implicit request =>
+  def create(category:String) = Action(parse.multipartFormData) { implicit request => 
     writeForm.bindFromRequest.fold(
-    formWithErrors => BadRequest,
+      formWithErrors => BadRequest,
       {
-        case (title, content) =>
-          User.findByEmail(username).map { user =>
-            //카테 고리
+        case (title, contnet) =>
+          //session get email   
+          Logger.info("Trying to upload a file")
+
+          User.findByEmail(request.session("email")).map {
+            user =>
+            //이메일
             val email = user.email
+            //이름
             val name = user.name
+            //카테고리
             val category_id = getCategory_id(category)
+            //리딩수
             val readings = 0
             //현재 시간
             val today = Calendar.getInstance.getTime
@@ -106,20 +111,32 @@ object Boards extends Controller with Secured {
             val createDate = Some(date(curTimeFormat.format(today)))
             //업데이트 시간
             val updateDate = Some(date(curTimeFormat.format(today)))
-            //파일이름
-            val fileName = ""
-            //파일형식
-            val contentType = ""
-            //파일사이즈
-            val fileSize = 1
-            //파일 업데이트 날짜
-            var fileDate = Some(date(curTimeFormat.format(today)))
+            //첨부파일이 있는 경우
+            request.body.file("clip_file_name").map {
+              clip_file =>              
+                val fileName = clip_file.filename
+                val fileType = clip_file.contentType
+                val fileSize = 1
+                //파일 업로드 시간
+                var fileDate = Some(date(curTimeFormat.format(today)))
 
-            val boards =  Board.create(
-              Board(NotAssigned, email, name, category_id, title, content, readings, createDate, updateDate, fileName, contentType, fileSize, fileDate)
-            )
-          }.getOrElse(Forbidden)
-          Redirect(routes.Boards.list(category, 1))
+                clip_file.ref.moveTo(new File("/tmp/"))
+
+                val boards =  Board.create(
+                  Board(NotAssigned, email, name, category_id, title, contnet, readings, createDate, updateDate, fileName, fileType, fileSize, fileDate)
+                )              
+            }.getOrElse{
+              val fileName = ""
+              val contentType = ""
+              val fileSize = 0
+              //파일 업로드 시간
+              var fileDate = Some(date(curTimeFormat.format(today)))
+              val boards =  Board.create(
+                Board(NotAssigned, email, name, category_id, title, contnet, readings, createDate, updateDate, fileName, Some(contentType), fileSize, fileDate)
+              )
+            } 
+          }                   
+          Redirect(routes.Boards.list(category, 1)) 
       }
     )
   }

@@ -18,7 +18,7 @@ case class Board(id: Pk[Long] = NotAssigned,
                  created_at:Option[Date],
                  updated_at:Option[Date],
                  clip_file_name:String,
-                 clip_file_content_type:String,
+                 clip_file_content_type:Option[String],
                  clip_file_size:Long,
                  clip_file_updated_at:Option[Date])
 
@@ -34,7 +34,7 @@ object Board {
     get[Option[Date]]("boards.created_at") ~
     get[Option[Date]]("boards.updated_at") ~
     get[String]("boards.clip_file_name") ~
-    get[String]("boards.clip_file_content_type") ~
+    get[Option[String]]("boards.clip_file_content_type") ~
     get[Long]("boards.clip_file_size") ~
     get[Option[Date]]("boards.clip_file_updated_at") map {
       case id~email~name~board_category_id~title~body~readings~created_at~updated_at~clip_file_name~clip_file_content_type~clip_file_size~clip_file_updated_at => Board(
@@ -147,7 +147,7 @@ object Board {
         'created_at -> boards.created_at,
         'updated_at -> boards.updated_at,
         'clip_file_name -> boards.clip_file_name,
-        'clip_file_content_type -> boards.clip_file_name,
+        'clip_file_content_type -> boards.clip_file_content_type,
         'clip_file_size -> boards.clip_file_size,
         'clip_file_updated_at -> boards.clip_file_updated_at
       ).executeUpdate()
