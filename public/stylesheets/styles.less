@@ -2,31 +2,71 @@
     font-family:ng;
     src:url(NanumGothic.eot)
 }
+//페이지 타이틀 색상
+@yellow: #FFCC33;
+@light_blue: #78FEFE;
 
 body{
+
 }
 
 #main-container{
-    padding-left:20px;
-    padding-right:20px;
+   padding-left:40px;
+   padding-right:40px; 
 }
 
-#main-container .col-md-1{
-    padding:0px;
-    width:1%;
+div.body-container{
+    padding-left:100px;
+    padding-right:100px;
 }
 
-#left-container{
-
+div.page-header{
+    h3{
+        color:@yellow;
+    }
 }
 
-#body-container{
+div.top-container{
+   li a:link, a:hover, a:active, a:visited{
+        color:#FFFFFF;
+   }
 
+   li.user {
+    a:link, a:hover, a:active, a:visited{
+        color:@light_blue;
+    }
+   }
 }
 
-#body-container h4{
-    font-weight: bold;
+/* 하단 버튼 셋트 */
+div.btn-ctrl-set{
+    text-align: right;
 }
+
+/* 페이지 네비게이션 */
+div.board-pagenavigation{
+    text-align: center;
+}
+
+/* footer */
+
+div.footer{
+    nav.navbar-fixed-bottom{
+        height:40px;
+        min-height:40px;         
+        div.bottom-center{
+          text-align: center;          
+          h6{
+            color:#FFFFFF;
+            a{
+                color:@yellow;
+            }
+          }
+       }
+   }   
+}
+
+/*
 
 div.board-bottom{
     border-radius: 5px;
@@ -40,7 +80,6 @@ div.board-btn{
 div.board-pagenavigation{
     text-align: center;
 }
-/* 게시판 테이블 */
 td.table-number{
     width:10%;
     max-width:10%;
@@ -89,7 +128,7 @@ p.default-line{
     background: #666666;
     margin-top:10px;
     margin-bottom:10px;
-}
+}*/
 
 /* board */
 div.board-save{
@@ -107,12 +146,3 @@ td.read-td-naming{
     text-align: center;
 }
 
-/* footer */
-nav.navbar-fixed-bottom{
-    height:40px;
-    min-height:40px;
-}
-div.bottom-center p{
-    text-align: center;
-    color: #89FEFD;
-}

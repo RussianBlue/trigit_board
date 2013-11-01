@@ -9,36 +9,38 @@ import anorm._
 import anorm.SqlParser._
 
 case class Board(id: Pk[Long] = NotAssigned,
-                 email: String,
-                 name:String,
+                 user_id: String,
+                 project_id:Long,
                  board_category_id : Long,
                  title:String,
                  body:String,
                  readings:Long,
                  created_at:Option[Date],
                  updated_at:Option[Date],
-                 clip_file_name:String,
-                 clip_file_content_type:Option[String],
-                 clip_file_size:Long,
-                 clip_file_updated_at:Option[Date])
+                 file_name:String,
+                 file_content_type:Option[String],
+                 file_size:Long,
+                 file_updated_at:Option[Date],
+                 parent_id:Long)
 
 object Board {
   val simple = {
     get[Pk[Long]]("boards.id") ~
-    get[String]("boards.email") ~
-    get[String]("boards.name") ~
+    get[String]("boards.user_id") ~
+    get[Long]("boards.project_id") ~
     get[Long]("boards.board_category_id") ~
     get[String]("boards.title") ~
     get[String]("boards.body") ~
     get[Long]("boards.readings") ~
     get[Option[Date]]("boards.created_at") ~
     get[Option[Date]]("boards.updated_at") ~
-    get[String]("boards.clip_file_name") ~
-    get[Option[String]]("boards.clip_file_content_type") ~
-    get[Long]("boards.clip_file_size") ~
-    get[Option[Date]]("boards.clip_file_updated_at") map {
-      case id~email~name~board_category_id~title~body~readings~created_at~updated_at~clip_file_name~clip_file_content_type~clip_file_size~clip_file_updated_at => Board(
-        id, email, name, board_category_id, title, body, readings, created_at, updated_at, clip_file_name, clip_file_content_type, clip_file_size, clip_file_updated_at
+    get[String]("boards.file_name") ~
+    get[Option[String]]("boards.file_content_type") ~
+    get[Long]("boards.file_size") ~
+    get[Option[Date]]("boards.file_updated_at") ~ 
+    get[Long]("boards.parent_id") map {
+      case id~user_id~project_id~board_category_id~title~body~readings~created_at~updated_at~file_name~file_content_type~file_size~file_updated_at~parent_id => Board(
+        id, user_id, project_id, board_category_id, title, body, readings, created_at, updated_at, file_name, file_content_type, file_size, file_updated_at, parent_id
       )
     }
   }
@@ -48,21 +50,13 @@ object Board {
       SQL("select * from boards").as(Board.simple *)
     }
   }
-  //아이디 검색
-  def findById(id:Long): Option[Board] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from boards where id = {id}").on(
-        'id -> id
-      ).as(Board.simple.singleOpt)
-    }
-  }
-  //이메일 검색
-  def findByEmail(email: String): Option[Board] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from boards where email = {email}").on(
-        'email -> email
-      ).as(Board.simple.singleOpt)
-    }
+
+  def findByProject(id:Long):Option[Board] = {
+    DB.withConnection { implicit connection =>      
+        SQL("select * from boards where project_id = {project_id}").on(
+          'project_id -> id
+        ).as(Board.simple.singleOpt)
+     }
   }
 
   //해당 카테고리의 리스트 가져오기
@@ -72,7 +66,7 @@ object Board {
     DB.withConnection { implicit connection =>
       SQL(
         """
-        select * from boards where board_category_id = {board_category_id}
+        select * from boards where project_id = {board_category_id}
         order by id desc
         limit {pageSize} offset {offset}
         """
@@ -89,26 +83,13 @@ object Board {
     DB.withConnection { implicit connection =>
       SQL(
         """
-        select count(*) from boards where board_category_id = {board_category_id}
+        select count(*) from boards where project_id = {project_id}
         """
       ).on(
-        'board_category_id -> id
+        'project_id -> id
       ).as(scalar[Long].single)
     }
   }
-
-//  def getCountCategory(id:Long): Seq[Board] = {
-//    DB.withConnection { implicit connection =>
-//      SQL(
-//        """
-//          select * from boards where board_category_id = {board_category_id}"
-//          select count(*) from boards where board_category_id
-//        """
-//      ).on(
-//        'board_category_id -> id
-//      ).as(Board.simple.*)
-//    }
-//  }
 
   /**
    * Check if a user is a member of this project
@@ -133,23 +114,24 @@ object Board {
       SQL(
         """
           insert into boards values (
-            {id}, {email}, {name}, {board_category_id}, {title}, {body}, {readings}, {created_at}, {updated_at}, {clip_file_name}, {clip_file_content_type}, {clip_file_size}, {clip_file_updated_at}
+            {id}, {user_id}, {project_id}, {board_category_id}, {title}, {body}, {readings}, {created_at}, {updated_at}, {file_name}, {file_content_type}, {file_size}, {file_updated_at}, {parent_id}
           )
         """
       ).on(
         'id -> boards.id,
-        'email -> boards.email,
-        'name -> boards.name,
+        'user_id -> boards.user_id,
+        'project_id -> boards.project_id,
         'board_category_id -> boards.board_category_id,
         'title -> boards.title,
         'body -> boards.body,
         'readings -> boards.readings,
         'created_at -> boards.created_at,
         'updated_at -> boards.updated_at,
-        'clip_file_name -> boards.clip_file_name,
-        'clip_file_content_type -> boards.clip_file_content_type,
-        'clip_file_size -> boards.clip_file_size,
-        'clip_file_updated_at -> boards.clip_file_updated_at
+        'file_name -> boards.file_name,
+        'file_content_type -> boards.file_content_type,
+        'file_size -> boards.file_size,
+        'file_updated_at -> boards.file_updated_at,
+        'parent_id -> boards.parent_id
       ).executeUpdate()
 
       boards.copy(id = boards.id)

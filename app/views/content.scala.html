@@ -1,3 +1,15 @@
-<div class="page-header">
-    <h3>트리짓 소프트웨어 <small>공정관리게시판</small></h3>
-</div>
+@(user:User)
+
+@main(user){
+	@if(user.user_type == "admin"){
+		<div class="page-header">
+	    <h3>트리짓소프트웨어 <small>공정관리게시판</small></h3>	    
+		</div>
+
+		<h5> 관리자 모드로 접속하셨습니다. </h5>
+	}else{
+		<div class="page-header">
+	    <h3>트리짓소프트웨어 <small>공정관리게시판</small></h3>
+		</div>
+	}	
+}

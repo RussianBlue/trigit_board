@@ -20,11 +20,11 @@ object Login extends Controller {
 
   val loginForm = Form(
     tuple(
-      "email" -> text,
+      "id" -> text,
       "password" -> text
-    ) verifying ("Email과 Password를 확인해 주세요.", result => result match {
-      case (email, password) => {
-        User.authenticate(email, password).isDefined
+    ) verifying ("ID와 Password를 확인해 주세요.", result => result match {
+      case (id, password) => {
+        User.authenticate(id, password).isDefined
       }
     })
   )
@@ -32,7 +32,7 @@ object Login extends Controller {
   def authenticate = Action { implicit request =>
     loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.signup.login(formWithErrors)),
-      user => Redirect(routes.Application.main()).withSession("email" -> user._1)
+      user => Redirect(routes.Application.main()).withSession("id" -> user._1)
     )
   }
 
@@ -53,7 +53,7 @@ trait Secured {
   /**
    * Retrieve the connected user email.
    */
-  private def username(request: RequestHeader) = request.session.get("email")
+  private def username(request: RequestHeader) = request.session.get("id")
   /**
    * Redirect to login if the user in not authorized.
    */
@@ -66,15 +66,14 @@ trait Secured {
    */
   def IsAuthenticated(f: => String => Request[AnyContent] => Result) = Security.Authenticated(username, onUnauthorized) { user =>
     Action(request => f(user)(request))
-  }
+  }  
 
-  def IsMemberOf(id: Long)(f: => String => Request[AnyContent] => Result) = IsAuthenticated { user => request =>
-    if(Board.isMember(id, user)) {
-      f(user)(request)
-    } else {
-      Results.Forbidden
+  def withAuth(f: => String => Request[AnyContent] => Result) = {
+    Security.Authenticated(username, onUnauthorized) { user =>
+      Action(request => f(user)(request))
     }
   }
+
 
   /**
    * Check if the connected user is a owner of this task.

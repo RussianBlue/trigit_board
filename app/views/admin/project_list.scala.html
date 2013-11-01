@@ -1,0 +1,53 @@
+@(user:User, projects:Seq[Project], page:Long, pageLength:Long, count:Long)
+
+@link(newPage: Long) = @{
+    routes.Admin.viewProjectList(newPage)
+}
+
+@prev() = @{
+  if(page > 1){ link(page -1) }else{ link(1) }
+}
+@next() = @{
+    if(page < (count/pageLength + 1)){   link(page + 1)   }else{   link(page)  }
+}
+
+@tableNumber(newIndex:Int) = @{
+    count - newIndex - ((page-1) * pageLength)
+}
+
+@totalPage() = @{
+    (count/pageLength + 1) toInt
+}
+
+@main(user) {
+	<div class="page-header">
+    <h3> 프로젝트 목록 <small> | PROJECT LIST</small></h3>
+	</div>
+	<table class="table table-bordered">
+    <tr class="warning">               
+        <td>프로젝트 아이디</td>
+        <td>프로젝트명</td>
+        <td>과정명</td>
+        <td>사용자 ID</td>
+        <td>날짜</td>
+       	<td>
+       		       		
+       	</td>
+    </tr>
+
+    <tr>
+    	<td></td>
+    	<td></td>
+    	<td></td>
+    	<td></td>
+    	<td></td>
+    	<td>
+    		<button class="btn btn-warning btn-xs">수정</button>
+    		<button class="btn btn-danger btn-xs">삭제</button>
+    	</td>
+    </tr>
+  </table>
+  <div class="btn-ctrl-set">
+  	<button class="btn btn-info">프로젝트 생성하기</button>
+  </div>
+}

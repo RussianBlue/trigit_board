@@ -22,10 +22,10 @@
          <!-- Login Form -->
          @helper.form(routes.Login.authenticate, 'class -> "form-signin") {
             <h2 class="form-signin-heading">트리짓 소프트웨어 <br> 공정관리 게시판</h2>
-            E-Mail :
-            <input type="email" class="form-control" placeholder="E-mail" name="email" id="email" autofocus value="@form("email").value">
+            ID :
+            <input type="id" class="form-control" placeholder="id" name="id" id="_id" autofocus value="@form("id").value">
             Password :
-            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+            <input type="password" class="form-control" placeholder="password" name="password" id="password">
             <input type="checkbox" value="remember-me"> 아이디 기억하기
             <button id="btn-login" class="btn btn-lg btn-success btn-block" type="submit">로그인</button>
             <p></p>

@@ -1,0 +1,69 @@
+@(user:User, users:Seq[User], page:Long, pageLength:Long, count:Long)
+
+@link(newPage: Long) = @{
+    routes.Admin.viewUserList(newPage)
+}
+
+@prev() = @{
+  if(page > 1){ link(page -1) }else{ link(1) }
+}
+@next() = @{
+    if(page < (count/pageLength + 1)){   link(page + 1)   }else{   link(page)  }
+}
+
+@tableNumber(newIndex:Int) = @{
+    count - newIndex - ((page-1) * pageLength)
+}
+
+@totalPage() = @{
+    (count/pageLength + 1) toInt
+}
+
+@main(user) { 
+	<div class="page-header">
+    <h3> 사용자 목록 <small> | USER LIST</small></h3>
+	</div>
+	<table class="table table-bordered">
+    <tr class="warning">
+    		<td>번호</td>              
+        <td>아이디</td>
+        <td>이름</td>
+        <td>이메일</td>
+        <td>계정 권한</td>
+        <td>프로젝트 권한</td>
+        <td></td>
+    </tr>
+  	@for(i <- users.indices){
+	  	<tr>
+	  		<td>@tableNumber(i)</td>
+	  		<td>@users(i).user_id</td>
+	  		<td>@users(i).name</td>
+	  		<td>@users(i).email</td>
+	  		<td>@users(i).user_type</td>
+	  		<td>@users(i).project_id</td>
+	  		<td>
+	  			<button class="btn btn-success btn-sm">수정</button>
+    			<button class="btn btn-danger btn-sm">삭제</button>
+	  		</td>
+	  	</tr>
+  	}
+  </table>
+  <div class="btn-ctrl-set">
+  	<button class="btn btn-info">신규 사용자 등록</button>
+  </div>  
+  @if(count > pageLength){
+    <div class="board-pagenavigation">
+        <ul class="pagination">
+            <li><a href="@prev()">Prev</a></li>
+            @for(i <- 1 to totalPage()) {
+                @if(i == page){
+                    <li class="active"><a href="@link(i)">@i</a></li>
+                }else{
+                    <li><a href="@link(i)">@i</a></li>
+                }
+            }
+            <li><a href="@next()">Next</a></li>
+        </ul>
+    </div>
+}
+}

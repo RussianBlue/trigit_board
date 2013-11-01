@@ -12,9 +12,9 @@ import views._
 
 object Application extends Controller with Secured{
 
-  def main = IsAuthenticated { username => _ =>
-    User.findByEmail(username).map { user =>
-      Ok(views.html.main(views.html.project.project(), views.html.content()))
+  def main = IsAuthenticated { user => _ =>
+    User.findById(user).map { user =>
+      Ok(views.html.content(user))
     }.getOrElse(Forbidden)
   }
 

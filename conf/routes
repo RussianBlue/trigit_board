@@ -9,8 +9,19 @@ GET      /login                                  controllers.Login.login
 POST     /login                                  controllers.Login.authenticate
 GET      /logout                                 controllers.Login.logout
 
-GET      /board/:category/page=:page             controllers.Boards.list(category:String, page:Long)
+#ADMIN
 
+# 신규 프로젝트 생성
+GET      /admin/newProject                       controllers.Admin.createProjectPage
+POST     /admin/newProject                       controllers.Admin.newProject
+
+# 리스트 보기
+GET      /admin/userList/page=:page              controllers.Admin.viewUserList(page:Long)
+GET      /admin/projectList/page=:page           controllers.Admin.viewProjectList(page:Long)
+
+
+# 해당 카테고리로 이동하기
+GET      /board/:category/page=:page             controllers.Boards.list(category:String, page:Long)
 GET      /board/:category/new                    controllers.Boards.newBoard(category:String)
 
 # Create
@@ -25,6 +36,9 @@ POST     /board/update                           controllers.Boards.update(id:Lo
 
 # Delete
 DELETE   /board/:category/:id/delete             controllers.Boards.remove(id:Long, category:String)
+
+# Reply
+GET      /board/:category/:id/reply             controllers.Boards.replyBoard(id:Long, category:String)
 
 # Javascript routing
 GET     /assets/javascripts/routes               controllers.Application.javascriptRoutes

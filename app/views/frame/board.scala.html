@@ -6,9 +6,6 @@
 @next() = @{
     if(page < (count/pageLength + 1)){   link(page + 1)   }else{   link(page)  }
 }
-@startPage() = @{
-  1
-}
 
 @link(newPage: Long) = @{
     routes.Boards.list(category, newPage)
@@ -21,6 +18,7 @@
 @totalPage() = @{
     (count/pageLength + 1) toInt
 }
+
 <div class="page-header">
     <h3>게시판 <small> | @category</small></h3>
 </div>
@@ -40,15 +38,21 @@
                         @tableNumber(i)
                     </td>
                     <td class="table-title"><a href="@routes.Boards.readBoard(boards(i).id.get, category)">@boards(i).title</a></td>
-                    <td class="table-name">@boards(i).name</td>
+                    <td class="table-name">
+                        @User.findById(boards(i).user_id).map { user => 
+                            @user.name
+                        }
+                    </td>
                     <td class="table-file">
-                        @if(!boards(i).clip_file_name.isEmpty) {
+                        @if(!boards(i).file_name.isEmpty) {
                             <a href="#"><span class="glyphicon glyphicon-save"></span></a>
                         }
                     </td>
                     <td class="table-date">
                         <div class="board-date">
-                            <span class="">@boards(i).created_at</span>
+                            <span class="">
+                                @boards(i).created_at
+                            </span>
                         </div>
                     </td>
                     <td class="table-read">@boards(i).readings</td>
@@ -66,7 +70,7 @@
     <div class="board-pagenavigation">
         <ul class="pagination">
             <li><a href="@prev()">Prev</a></li>
-            @for(i <- startPage() to totalPage()) {
+            @for(i <- 1 to totalPage()) {
                 @if(i == page){
                     <li class="active"><a href="@link(i)">@i</a></li>
                 }else{
