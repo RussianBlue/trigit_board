@@ -38,6 +38,7 @@ object Boards extends Controller with Secured {
       "content" -> text
     )
   )
+  
   //보드타입 체크
   def getProject_id(project_type: Any): Long =
     project_type match {
@@ -52,7 +53,7 @@ object Boards extends Controller with Secured {
 
   //각 해당하는 리스트 보기
   def list(category:String, page:Long) = IsAuthenticated { user => _ =>
-    User.findById(user).map 
+    User.findByUserId(user).map 
     {
       user =>
         val board_id = getProject_id(category)
@@ -66,7 +67,7 @@ object Boards extends Controller with Secured {
 
   //신규보드 생성 페이지로 이동
   def newBoard(project_id:String) = IsAuthenticated { user => _ =>
-    User.findById(user).map { user =>
+    User.findByUserId(user).map { user =>
       //Ok(views.html.main(views.html.project.project(), views.html.form.write(writeForm, user, project_id, category, "게시글 작성")))
       Ok
     }.getOrElse(Forbidden)
@@ -115,7 +116,7 @@ object Boards extends Controller with Secured {
       {
         case (title, contnet) =>
           //session get email   
-          User.findById(request.session("user_id")).map {
+          User.findByUserId(request.session("user_id")).map {
             user =>
             //이메일
             val user_id = user.user_id

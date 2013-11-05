@@ -41,15 +41,15 @@
 	  		<td>@users(i).email</td>
 	  		<td>@users(i).user_type</td>
 	  		<td>@users(i).project_id</td>
-	  		<td>
-	  			<button class="btn btn-success btn-sm">수정</button>
-    			<button class="btn btn-danger btn-sm">삭제</button>
+	  		<td>          
+	  			<a class="btn btn-success btn-xs" href="@routes.Admin.editUserPage(users(i).id.get)">수정</a>
+    			<a class="btn btn-danger btn-xs btn-userdelete" id="@users(i).id">삭제</a>
 	  		</td>
 	  	</tr>
   	}
   </table>
   <div class="btn-ctrl-set">
-  	<button class="btn btn-info">신규 사용자 등록</button>
+  	<a class="btn btn-info" href="@routes.Admin.newUserPage">신규 사용자 등록</a>
   </div>  
   @if(count > pageLength){
     <div class="board-pagenavigation">

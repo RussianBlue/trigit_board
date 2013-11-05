@@ -39,10 +39,21 @@ object User {
     }
   }
 
+   /**
+   * Retrieve a User from email.
+   */
+  def findById(id: Long): Seq[User] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from user where id = {id}").on(
+        'id -> id
+      ).as(User.simple.*)
+    }
+  }
+
   /**
     * Retrieve a User from id.
     */
-  def findById(user_id:String): Option[User] = {
+  def findByUserId(user_id:String): Option[User] = {
     DB.withConnection { implicit  connection =>
       SQL("select * from user where user_id = {user_id}").on(
         'user_id -> user_id
@@ -67,6 +78,12 @@ object User {
         'pageSize -> pageSize,
         'offset -> offset
       ).as(User.simple.*)
+    }
+  }
+
+  def findAllUser():Seq[User] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from user").as(User.simple.*)
     }
   }
 
@@ -96,7 +113,7 @@ object User {
   /**
    * Create a User.
    */
-  def create(user: User): User = {
+  def create(user:User):User = {
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -107,14 +124,34 @@ object User {
       ).on(
         'id -> user.id,
         'user_id -> user.user_id,
+        'password -> user.password,        
+        'email -> user.email,
         'name -> user.name,
-        'password -> user.password,
-        'type -> user.user_type,        
+        'user_type -> user.user_type,
         'project_id -> user.project_id
       ).executeUpdate()
 
-      user
+      user.copy(id = user.id)
     }
   }
 
+  def editUser(id:Long, newPassWord:String, newEmail:String, newName:String){    
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update user set password = {password}, email = {email}, name = {name} where id = {id}
+        """
+      ).on(
+        'id -> id, 'password -> newPassWord, 'email -> newEmail, 'name -> newName
+      ).executeUpdate()
+    }
+  }
+
+  def removeUser(id:Long) {
+    DB.withConnection { implicit connection =>
+      SQL("delete from user where id = {id}").on(
+        'id -> id
+      ).executeUpdate()
+    }
+  }
 }

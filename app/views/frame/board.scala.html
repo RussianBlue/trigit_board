@@ -39,7 +39,7 @@
                     </td>
                     <td class="table-title"><a href="@routes.Boards.readBoard(boards(i).id.get, category)">@boards(i).title</a></td>
                     <td class="table-name">
-                        @User.findById(boards(i).user_id).map { user => 
+                        @User.findByUserId(boards(i).user_id).map { user => 
                             @user.name
                         }
                     </td>

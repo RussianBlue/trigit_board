@@ -10,37 +10,36 @@ body{
 
 }
 
-#main-container{
-   padding-left:40px;
-   padding-right:40px; 
+div.page-header {
+    h3{ color:@yellow; }
 }
 
-div.body-container{
+div.body-container {
     padding-left:100px;
     padding-right:100px;
 }
 
-div.page-header{
-    h3{
-        color:@yellow;
-    }
-}
-
-div.top-container{
-   li a:link, a:hover, a:active, a:visited{
+div.top-container {
+   li a:link, a:hover, a:active, a:visited {
         color:#FFFFFF;
    }
 
    li.user {
-    a:link, a:hover, a:active, a:visited{
+    a:link, a:hover, a:active, a:visited {
         color:@light_blue;
     }
    }
 }
 
+p.text-warning.user_id{
+    line-height: 30px;
+    padding-left: 10px;
+}
+
 /* 하단 버튼 셋트 */
 div.btn-ctrl-set{
     text-align: right;
+    padding-top:10px;
 }
 
 /* 페이지 네비게이션 */
@@ -122,13 +121,14 @@ h4.project-list{
     font-weight: bold;
 }
 
+*/
 p.default-line{
     height:1px;
     width:100%;
     background: #666666;
     margin-top:10px;
     margin-bottom:10px;
-}*/
+}
 
 /* board */
 div.board-save{

@@ -9,13 +9,13 @@
         <tr>
             <td class="read-td-naming">작성자</td>
             <td>
-                @User.findById(boards.user_id).map { user => 
+                @User.findByUserId(boards.user_id).map { user => 
                     @user.name
                 }
             </td>
             <td class="read-td-naming">이메일</td>
             <td colspan="3">
-                @User.findById(boards.user_id).map { user => 
+                @User.findByUserId(boards.user_id).map { user => 
                     @user.email
                 }
             </td>

@@ -25,27 +25,21 @@ import views._
  */
 object Admin extends Controller with Secured {
 
-	 val writeForm = Form(
+	 val userForm = Form(
     tuple(
-      "title" -> text,
-      "lesson" -> text
-    )
+      "user_id" -> text,
+      "password" -> text,
+      "email" -> text,
+      "user_name" -> text,
+      "user_type" -> text
+    ) 
   )
-
-	 //프로젝트 생성 페이지로 이동
-	def createProjectPage = IsAuthenticated { user => _ =>
-		User.findById(user).map
-		{
-			user=>
-			Ok(views.html.admin.new_project(user))
-		}.getOrElse(Forbidden)
-	}
 
 	//유저 정보 보기 
 	def viewUserList(page:Long) = IsAuthenticated { user => _ =>
-		User.findById(user).map
+		User.findByUserId(user).map
 		{
-			user=>			
+			user=>
       val pageLength = 10
       val users = User.findAll(page - 1, pageLength)
       val count = User.findAllUserCount
@@ -53,21 +47,43 @@ object Admin extends Controller with Secured {
 			Ok(views.html.admin.user_list(user, users, page, pageLength, count))
 		}.getOrElse(Forbidden)
 	}
-
-	//프로젝트 리스트 보기
-	def viewProjectList(page:Long) = IsAuthenticated { user => _ =>
-		User.findById(user).map
+	//신규 유저 생성 페이지로 이동
+	def newUserPage = IsAuthenticated { user => _ =>
+		User.findByUserId(user).map
 		{
-			user=>			
-      val pageLength = 10
-      val projects = Project.findAll(page - 1, pageLength)
-      val count = Project.findAllProjectCount
+			user =>
+			Ok(views.html.admin.new_user(user, userForm, User.findAllUser))
+		}.getOrElse(Forbidden)
+	}
+	//신규 유저 생성
+	def newUser(user_id:String, email:String, name:String, password:String, user_type:String, project_id:Long) = Action { implicit request =>		
+		User.findAllUser.map{
+			user=>
+			if(user.user_id == user_id){
+					 	  
+			}
+		}
+		val users =  User.create(User(NotAssigned, user_id, email, name, password, user_type, 1))
+		Redirect(routes.Admin.viewUserList(1))	
+	}
 
-			Ok(views.html.admin.project_list(user, projects, page, pageLength, count))
+	//유저 정보 수정 페이지로 이동
+	def editUserPage(id:Long) = IsAuthenticated { user => _ =>
+		User.findByUserId(user).map
+		{
+			user =>
+			Ok(views.html.admin.edit_user(user, User.findById(id), userForm))	
 		}.getOrElse(Forbidden)
 	}
 
-	def newProject = Action {
+	//유저 수정
+	def editUser(id:Long, password:String, email:String, name:String) = IsAuthenticated { _ => implicit request =>		
+		User.editUser(id, password, email, name)
+    Ok
+	}
+	//유저 삭제
+	def removeUser(id:Long) = IsAuthenticated { user => _ =>
+		User.removeUser(id)
 		Ok
 	}
 }

@@ -1,0 +1,58 @@
+@(user:User, form:Form[(String,String,String,String,String)], users:Seq[User])
+
+@main(user){
+	<div class="page-header">
+    <h3> 신규 사용자 등록 <small> | NEW USER</small></h3>
+	</div>
+
+	<form class="form-horizontal" role="form" name="edituser">
+	  <div class="form-group">
+	    <label for="user_id" class="col-sm-2 control-label">아이디 :</label>
+	    <div class="col-sm-4">
+	      <input type="text" class="form-control" name="user_id" placeholder="아이디를 입력해 주세요.">
+	      <p class="text-warning user_id"> 중복된 아이디가 있습니다.</p>
+	    </div>	    
+	  </div>
+	  <div class="form-group">
+	    <label for="password" class="col-sm-2 control-label">비밀번호 :</label>
+	    <div class="col-sm-4">
+	      <input type="text" class="form-control" name="password" placeholder="비밀번호를 입력해 주세요.">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="name" class="col-sm-2 control-label">이름 :</label>
+	    <div class="col-sm-4">
+	      <input type="text" class="form-control" name="user_name" placeholder="이름을 입력해 주세요.">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="email" class="col-sm-2 control-label">이메일 :</label>
+	    <div class="col-sm-6">
+	      <input type="email" class="form-control" name="email" placeholder="이메일을 입력해 주세요.">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="user_id" class="col-sm-2 control-label">프로젝트권한 :</label>
+	    <div class="col-sm-8">
+	      <input type="text" class="form-control" name="project_id" placeholder="프로젝트 권한">
+	    </div>
+	  </div>
+
+	   <div class="form-group">
+	    <label for="user_id" class="col-sm-2 control-label">유저타입 :</label>
+	    <div class="col-sm-2">
+	    	<select name="auth" class="select-auth form-control">
+	      	<option value="admin">ADMIN</option>
+	      	<option value="client">CLIENT</option>
+	      	<option value="user">USER</option>
+	     	</select>
+	    </div>
+	  </div> 
+
+	  <p class="default-line"></p>
+	  <div class="btn-ctrl-set">
+	  	<a class="btn btn-success btn-list" href="@routes.Admin.viewUserList(1)">목록보기</a>
+	  	<a class="btn btn-info btn-newuser">등록하기</a>
+	  </div>
+	</form>
+}

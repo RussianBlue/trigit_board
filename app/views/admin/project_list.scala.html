@@ -1,7 +1,7 @@
 @(user:User, projects:Seq[Project], page:Long, pageLength:Long, count:Long)
 
 @link(newPage: Long) = @{
-    routes.Admin.viewProjectList(newPage)
+    routes.Projects.viewProjectList(newPage)
 }
 
 @prev() = @{
