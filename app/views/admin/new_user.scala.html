@@ -1,11 +1,11 @@
-@(user:User, form:Form[(String,String,String,String,String)], users:Seq[User])
+@(user:User, users:Seq[User], projects:Seq[Project])
 
 @main(user){
 	<div class="page-header">
     <h3> 신규 사용자 등록 <small> | NEW USER</small></h3>
 	</div>
 
-	<form class="form-horizontal" role="form" name="edituser">
+	<form class="form-horizontal" role="form" name="new_user">
 	  <div class="form-group">
 	    <label for="user_id" class="col-sm-2 control-label">아이디 :</label>
 	    <div class="col-sm-4">
@@ -32,16 +32,32 @@
 	    </div>
 	  </div>
 	  <div class="form-group">
-	    <label for="user_id" class="col-sm-2 control-label">프로젝트권한 :</label>
-	    <div class="col-sm-8">
-	      <input type="text" class="form-control" name="project_id" placeholder="프로젝트 권한">
+	    <label for="user_id" class="col-sm-2 control-label">프로젝트 :</label>
+	    <div class="col-sm-6">
+	      <select multiple class="form-control" id="project">
+
+	      </select>     
+	    </div>
+	   </div>
+
+	   <div class="form-group">
+	    <label for="email" class="col-sm-2 control-label">프로젝트 선택 :</label>
+	    <div class="col-sm-6">
+	     <select name="select-project" class="form-control" id="select-project">
+	      	@projects.map { project =>	      	
+	      		<option value="@project.project_id"> @project.project_id - @project.project_title </option>
+	      	}
+	     	</select>
+	     	<span class="help-block text-info"> 해당 프로젝트를 선택해 주세요.</span>
+	     	<a class="btn btn-warning btn-addProject">프로젝트 추가</a>	
+	     	<a class="btn btn-danger btn-removeProject">프로젝트 삭제</a>	     	
 	    </div>
 	  </div>
 
 	   <div class="form-group">
 	    <label for="user_id" class="col-sm-2 control-label">유저타입 :</label>
 	    <div class="col-sm-2">
-	    	<select name="auth" class="select-auth form-control">
+	    	<select name="auth" class="form-control" id="select-auth">
 	      	<option value="admin">ADMIN</option>
 	      	<option value="client">CLIENT</option>
 	      	<option value="user">USER</option>

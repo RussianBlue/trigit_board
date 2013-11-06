@@ -12,7 +12,6 @@ import java.text._
 import scala.concurrent.duration._
 import play.api.libs.concurrent.Execution.Implicits._
 
-import java.util.Calendar
 import java.io.File
 
 import anorm._
@@ -25,23 +24,15 @@ import views._
  */
 object Admin extends Controller with Secured {
 
-	 val userForm = Form(
-    tuple(
-      "user_id" -> text,
-      "password" -> text,
-      "email" -> text,
-      "user_name" -> text,
-      "user_type" -> text
-    ) 
-  )
-
-	//유저 정보 보기 
+	//유저 정보 보기
 	def viewUserList(page:Long) = IsAuthenticated { user => _ =>
 		User.findByUserId(user).map
 		{
 			user=>
+			//보여지는 페이지 갯수
       val pageLength = 10
       val users = User.findAll(page - 1, pageLength)
+      //유저 카운트 갯수
       val count = User.findAllUserCount
 
 			Ok(views.html.admin.user_list(user, users, page, pageLength, count))
@@ -52,19 +43,13 @@ object Admin extends Controller with Secured {
 		User.findByUserId(user).map
 		{
 			user =>
-			Ok(views.html.admin.new_user(user, userForm, User.findAllUser))
+			Ok(views.html.admin.new_user(user, User.findAllUser, Project.findAllProject))			
 		}.getOrElse(Forbidden)
 	}
 	//신규 유저 생성
-	def newUser(user_id:String, email:String, name:String, password:String, user_type:String, project_id:Long) = Action { implicit request =>		
-		User.findAllUser.map{
-			user=>
-			if(user.user_id == user_id){
-					 	  
-			}
-		}
-		val users =  User.create(User(NotAssigned, user_id, email, name, password, user_type, 1))
-		Redirect(routes.Admin.viewUserList(1))	
+	def newUser(user_id:String, email:String, name:String, password:String, user_type:String, project_id:String) = Action { implicit request =>		
+		val users = User.create(User(NotAssigned, user_id, email, name, password, user_type, project_id))
+		Redirect(routes.Admin.viewUserList(1))
 	}
 
 	//유저 정보 수정 페이지로 이동
@@ -72,13 +57,18 @@ object Admin extends Controller with Secured {
 		User.findByUserId(user).map
 		{
 			user =>
-			Ok(views.html.admin.edit_user(user, User.findById(id), userForm))	
+			val user_project:Seq[User] = User.findById(id)
+			user_project.map{
+				projects =>
+				val project_list:Array[String] = projects.project_id.split("|")	
+			}
+			Ok(views.html.admin.edit_user(user, User.findById(id), Project.findAllProject, project_list))
 		}.getOrElse(Forbidden)
 	}
 
 	//유저 수정
-	def editUser(id:Long, password:String, email:String, name:String) = IsAuthenticated { _ => implicit request =>		
-		User.editUser(id, password, email, name)
+	def editUser(id:Long, user_id:String, email:String, name:String, password:String, user_type:String, project_id:String) = IsAuthenticated { _ => implicit request =>		
+		User.editUser(id, user_id, email, name, password, user_type, project_id)
     Ok
 	}
 	//유저 삭제

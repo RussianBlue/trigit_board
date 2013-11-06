@@ -6,7 +6,7 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class User(id:Pk[Long] = NotAssigned, user_id:String, email: String, name: String, password: String, user_type:String, project_id:Long)
+case class User(id:Pk[Long] = NotAssigned, user_id:String, email: String, name: String, password: String, user_type:String, project_id:String)
 
 object User {
 
@@ -22,7 +22,7 @@ object User {
       get[String]("user.name") ~
       get[String]("user.password") ~
       get[String]("user.user_type") ~
-      get[Long]("user.project_id") map {
+      get[String]("user.project_id") map {
       case id~user_id~email~name~password~user_type~project_id => User(id, user_id, email, name, password, user_type, project_id)
     }
   }
@@ -54,6 +54,14 @@ object User {
     * Retrieve a User from id.
     */
   def findByUserId(user_id:String): Option[User] = {
+    DB.withConnection { implicit  connection =>
+      SQL("select * from user where user_id = {user_id}").on(
+        'user_id -> user_id
+      ).as(User.simple.singleOpt)
+    }
+  }
+
+  def findByUserIdSearch(user_id:String): Option[User] = {
     DB.withConnection { implicit  connection =>
       SQL("select * from user where user_id = {user_id}").on(
         'user_id -> user_id
@@ -135,14 +143,14 @@ object User {
     }
   }
 
-  def editUser(id:Long, newPassWord:String, newEmail:String, newName:String){    
+  def editUser(id:Long, newUserId:String, newEmail:String, newName:String, newPassWord:String, newUserType:String, newProjectId:String){    
     DB.withConnection { implicit connection =>
       SQL(
         """
-          update user set password = {password}, email = {email}, name = {name} where id = {id}
+          update user set user_id = {user_id}, password = {password}, email = {email}, name = {name}, user_type = {user_type}, project_id = {project_id} where id = {id}
         """
       ).on(
-        'id -> id, 'password -> newPassWord, 'email -> newEmail, 'name -> newName
+        'id -> id, 'user_id -> newUserId, 'password -> newPassWord, 'email -> newEmail, 'name -> newName, 'user_type -> newUserType, 'project_id -> newProjectId
       ).executeUpdate()
     }
   }

@@ -15,11 +15,11 @@ GET      /admin/userList/page=:page              controllers.Admin.viewUserList(
 
 # 신규 유저 생성
 GET      /admin/newUser                          controllers.Admin.newUserPage
-POST     /admin/newUser/new                      controllers.Admin.newUser(user_id:String, email:String, name:String, password:String, user_type:String, project_id:Long)
+POST     /admin/newUser/new                      controllers.Admin.newUser(user_id:String, email:String, name:String, password:String, user_type:String, project_id:String)
 
 # 유저리스트 업데이트
 GET      /admin/editUser                         controllers.Admin.editUserPage(id:Long)
-POST     /admin/editUser/edit                    controllers.Admin.editUser(id:Long, password:String, email:String, name:String)
+POST     /admin/editUser/edit                    controllers.Admin.editUser(id:Long, user_id:String, email:String, name:String, password:String, user_type:String, project_id:String)
 
 # 유저삭제
 DELETE   /admin/removeUser                       controllers.Admin.removeUser(id:Long)

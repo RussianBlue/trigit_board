@@ -1,23 +1,32 @@
 package models
 
+
+import java.util.{Date}
+
 import play.api.db._
 import play.api.Play.current
 
 import anorm._
 import anorm.SqlParser._
 
-case class Project(id:Pk[Long], user_id:String, project_id:Long, title:String, lesson:Long)
+case class Project(id:Pk[Long], 
+                   project_id:Long, 
+                   project_title:String, 
+                   lesson_id:Long, 
+                   lesson_title:String, 
+                   created_at:Option[Date])
 
 object Project {
 
 	val simple = {
-		get[Pk[Long]]("projects.id") ~
-		get[String]("projects.user_id") ~
+		get[Pk[Long]]("projects.id") ~		
 		get[Long]("projects.project_id") ~
-		get[String]("projects.title") ~
-		get[Long]("projects.lesson") map {
-      case id~user_id~project_id~title~lesson => Project(
-        id, user_id, project_id, title, lesson
+		get[String]("projects.project_title") ~
+		get[Long]("projects.lesson_id")~
+    get[String]("projects.lesson_title")~
+    get[Option[Date]]("projects.created_at") map {
+      case id~project_id~project_title~lesson_id~lesson_title~created_at => Project(
+        id, project_id, project_title, lesson_id, lesson_title, created_at
       )
     }
 	}
@@ -27,15 +36,16 @@ object Project {
 			SQL(
 				"""
 					insert into projects values (
-            {id}, {user_id}, {project_id}, {title}, {lesson}
+            {id}, {project_id}, {project_title}, {lesson_id}, {lesson_title}, {created_at}
           )
         """
       ).on(
         'id -> projects.id,
-        'user_id -> projects.user_id,
         'project_id -> projects.project_id,
-        'board_category_id -> projects.title,
-        'title -> projects.lesson
+        'project_title -> projects.project_title,
+        'lesson_id -> projects.lesson_id,
+        'lesson_title -> projects.lesson_title,
+        'created_at -> projects.created_at
       ).executeUpdate()
 
       projects.copy(id = projects.id)
@@ -59,6 +69,12 @@ object Project {
         'pageSize -> pageSize,
         'offset -> offset
       ).as(Project.simple.*)
+    }
+  }
+
+  def findAllProject:Seq[Project] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from projects").as(Project.simple.*)
     }
   }
 

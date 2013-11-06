@@ -45,6 +45,7 @@ object Projects extends Controller with Secured {
 			Ok(views.html.admin.project_list(user, projects, page, pageLength, count))
 		}.getOrElse(Forbidden)
 	}
+	
 	def newProject = Action {
 		Ok
 	}
