@@ -1,7 +1,16 @@
-@(user:User, user_id:Seq[User], projects:Seq[Project], project_list:Array[String])
+@(user:User, user_id:Seq[User], projects:Seq[Project])
 
 @project_list(_str:String) = @{
- _str.split("|")
+  _str.split('|').toArray
+}
+
+@findByTitle(_str:String) = @{
+	projects.map {
+		project =>
+		if(project.project_id.mkString("") == _str){
+			project.project_title
+		}		
+	}
 }
 
 @main(user){
@@ -38,11 +47,10 @@
 	    <label for="user_id" class="col-sm-2 control-label">프로젝트 :</label>
 	    <div class="col-sm-6">
 	      <select multiple class="form-control" id="project">
-	      	@project_list(user_info.project_id)
-
+	      	@for(i <- project_list(user_info.project_id)){
+	      		<option value="@project_list(i)">@project_list(i).mkString("") - @findByTitle(project_list(i).mkString(""))</option>
+	      	}
 	      </select>
-
-	      @project_list(user_info.project_id)
 	    </div>
 	   </div>
 	   

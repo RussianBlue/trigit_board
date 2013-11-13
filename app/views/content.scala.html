@@ -1,6 +1,6 @@
 @(user:User)
 
-@main(user){
+@main(user) {
 	@if(user.user_type == "admin"){
 		<div class="page-header">
 	    <h3>트리짓소프트웨어 <small>공정관리게시판</small></h3>	    
@@ -11,5 +11,7 @@
 		<div class="page-header">
 	    <h3>트리짓소프트웨어 <small>공정관리게시판</small></h3>
 		</div>
-	}	
+
+		<h5> @user.name 님 반갑습니다. <h5>
+	}
 }

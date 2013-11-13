@@ -23,34 +23,45 @@
 	<div class="page-header">
     <h3> 프로젝트 목록 <small> | PROJECT LIST</small></h3>
 	</div>
-	<table class="table table-bordered">
+  <table class="table table-bordered table-hover">
     <tr class="warning">
         <td>번호</td>            
-        <td>프로젝트 아이디</td>
-        <td>프로젝트명</td>
         <td>과정코드</td>
-        <td>과정타이틀</td>
+        <td>프로젝트명</td>
         <td>생성일</td>
-       	<td>
-       		       		
-       	</td>
+       	<td>프로젝트관리</td>
     </tr>
     @for(i <- projects.indices){
       <tr>
         <td>@tableNumber(i)</td>
         <td>@projects(i).project_id</td>
         <td>@projects(i).project_title</td>
-        <td>@projects(i).lesson_id</td>
-        <td>@projects(i).lesson_title</td>
         <td>@projects(i).created_at</td>
         <td>          
-          <a class="btn btn-success btn-xs" href="@routes.Admin.editUserPage(projects(i).id.get)">수정</a>
-          <a class="btn btn-danger btn-xs btn-userdelete" id="@projects(i).id">삭제</a>
+          <a class="btn btn-success btn-xs" href="@routes.Projects.editProjectPage(projects(i).id.get)">수정</a>
+          <a class="btn btn-danger btn-xs btn-projectdelete" id="@projects(i).id">삭제</a>
         </td>
       </tr>
     }
   </table>
+
   <div class="btn-ctrl-set">
-  	<button class="btn btn-info">프로젝트 생성하기</button>
+  	<a class="btn btn-info" href="@routes.Projects.newProjectPage">프로젝트 생성하기</a>
   </div>
+  </div>  
+  @if(count > pageLength){
+    <div class="board-pagenavigation">
+        <ul class="pagination pagination-sm">
+            <li><a href="@prev()">Prev</a></li>
+            @for(i <- 1 to totalPage()) {
+                @if(i == page){
+                    <li class="active"><a href="@link(i)">@i</a></li>
+                }else{
+                    <li><a href="@link(i)">@i</a></li>
+                }
+            }
+            <li><a href="@next()">Next</a></li>
+        </ul>
+    </div>
+  }
 }

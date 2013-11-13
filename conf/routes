@@ -11,26 +11,38 @@ GET      /logout                                 controllers.Login.logout
 
 ##################### ADMIN ##################### 
 # 유저리스트 보기
-GET      /admin/userList/page=:page              controllers.Admin.viewUserList(page:Long)
+GET      /admin/user_list/page=:page              controllers.Admin.viewUserList(page:Long)
 
 # 신규 유저 생성
-GET      /admin/newUser                          controllers.Admin.newUserPage
-POST     /admin/newUser/new                      controllers.Admin.newUser(user_id:String, email:String, name:String, password:String, user_type:String, project_id:String)
+GET      /admin/new_user                          controllers.Admin.newUserPage
+POST     /admin/new_user/new                      controllers.Admin.newUser(user_id:String, email:String, name:String, password:String, user_type:String, project_id:String)
 
 # 유저리스트 업데이트
-GET      /admin/editUser                         controllers.Admin.editUserPage(id:Long)
-POST     /admin/editUser/edit                    controllers.Admin.editUser(id:Long, user_id:String, email:String, name:String, password:String, user_type:String, project_id:String)
+GET      /admin/edit_user                         controllers.Admin.editUserPage(id:Long)
+POST     /admin/edit_user/edit                    controllers.Admin.editUser(id:Long, user_id:String, email:String, name:String, password:String, user_type:String, project_id:String)
 
 # 유저삭제
-DELETE   /admin/removeUser                       controllers.Admin.removeUser(id:Long)
+DELETE   /admin/remove_user                       controllers.Admin.removeUser(id:Long)
+
+
+##################### PROJECT ##################### 
+
+# 프로젝트 리스트 보기
+GET      /project/project_list/page=:page         controllers.Projects.viewProjectList(page:Long)
 
 
 # 신규 프로젝트 생성
-GET      /admin/newProject                       controllers.Projects.createProjectPage
-POST     /admin/newProject                       controllers.Projects.newProject
+GET      /project/new_project                     controllers.Projects.newProjectPage
+POST     /project/new_project/new                 controllers.Projects.newProject(project_id:String, project_title:String)
 
-# 프로젝트 리스트 보기
-GET      /admin/projectList/page=:page           controllers.Projects.viewProjectList(page:Long)
+POST     /project/edit                            controllers.Projects.editProject(id:Long, project_title:String)
+DELETE   /project/remove_project                  controllers.Projects.removeProject(id:Long)
+GET      /project/edit_project                    controllers.Projects.editProjectPage(id:Long)
+
+##################### PRODUCT #######################
+
+GET      /product/project=:project_id             controllers.Products.viewUserProject(project_id:String)
+POST     /product/new_product                     controllers.Products.newProduct(project_id:String)
 
 
 ##################### BOARD ##################### 
@@ -54,6 +66,8 @@ DELETE   /board/:category/:id/delete             controllers.Boards.remove(id:Lo
 # Reply
 GET      /board/:category/:id/reply             controllers.Boards.replyBoard(id:Long, category:String)
 
+##################### DOWNLOAD ####################
+GET      /files/                                controllers.Application.download(_url:String, _fileName:String)
 
 ##################### ROUTING ##################### 
 # Javascript routing
@@ -61,3 +75,4 @@ GET     /assets/javascripts/routes               controllers.Application.javascr
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+

@@ -4,6 +4,7 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
+import java.io.File
 
 import anorm._
 
@@ -18,11 +19,26 @@ object Application extends Controller with Secured{
     }.getOrElse(Forbidden)
   }
 
+  def download(_url:String, _fileName:String) = Action {
+    Ok.sendFile(new java.io.File(_url), fileName = (name) => _fileName)
+  }
+
   def javascriptRoutes = Action { implicit request =>
     import routes.javascript._
     Ok(
       Routes.javascriptRouter("jsRoutes")(
-        Boards.list, Boards.newBoard, Boards.readBoard, Boards.create, Boards.update, Boards.remove, Admin.newUser, Admin.editUser, Admin.removeUser
+        Boards.list, 
+        Boards.newBoard, 
+        Boards.readBoard, 
+        Boards.create, 
+        Boards.update, 
+        Boards.remove, 
+        Admin.newUser, 
+        Admin.editUser, 
+        Admin.removeUser, 
+        Projects.newProject, 
+        Projects.removeProject, 
+        Projects.editProject
       )
     ).as("text/javascript")
   }

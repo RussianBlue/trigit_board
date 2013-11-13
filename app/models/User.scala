@@ -69,6 +69,17 @@ object User {
     }
   }
 
+  def findByProject(project_id:String):Seq[User] = {
+    val tmp_id = "%"+project_id+"%"
+    DB.withConnection { implicit  connection =>
+      SQL("select * from user where project_id like {project_id}"
+      )
+      .on(
+        'project_id -> tmp_id
+      ).as(User.simple.*)
+    } 
+  }
+
   /**
    * Retrieve all users.
    */
@@ -140,6 +151,18 @@ object User {
       ).executeUpdate()
 
       user.copy(id = user.id)
+    }
+  }
+
+  def editProject(id:Long, project_id:String){
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update user set project_id = {project_id} where id = {id}
+        """
+      ).on(
+        'id -> id, 'project_id -> project_id
+      ).executeUpdate()
     }
   }
 

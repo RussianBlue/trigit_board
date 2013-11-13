@@ -1,0 +1,159 @@
+@(user:User, projects:Seq[Project], p_boards:Seq[Product], form:Form[(String, String, String)])
+
+@project_list(_str:String) = @{
+  _str.split('|').toArray
+}
+
+@findByTitle(_str:String) = @{
+    var projects = Project.findAllProject
+    projects.map {
+        project =>
+        if(project.project_id.mkString("") == _str){
+            project.project_title
+        }       
+    }
+}
+
+@fileURL(_project_id:String, _type:String, _fileName:String) = @{
+    "upload/" + _project_id + "/" +_type + "/" + _fileName
+}
+
+@main(user){
+    @projects.map{ project=>
+	<div class="page-header">    
+        <h3> @project.project_title <small> | 과정코드 : @project.project_id</small></h3>
+	</div>
+
+    <ul class="nav nav-tabs" id="product-tab">
+      <li class="active"><a href="#product" data-toggle="tab">과정산출물</a></li>
+      <li><a href="#project_board" data-toggle="tab">프로젝트게시판</a></li>
+    </ul>
+
+    <div id="project_board" class="tab-pane fade">
+        test
+    </div>
+
+    <div id="product" class="tab-pane fade active in">
+        <table class="table table-bordered table-hover">
+            <tr class="warning">
+                <td>차시</td>            
+                @for(i <- p_boards.indices){
+                    <td>@p_boards(i).chapter 차시
+
+                    @if(user.user_type != "client"){
+                        <a href="#" class="btn btn-default btn-xs btn-product-edit" id="@p_boards(i).id.get">수정</a>
+                    }
+
+                    </td>
+                }            
+            </tr>
+            
+            <tr>
+                <td>원고</td>
+                @for(i <- p_boards.indices){
+                    <td>
+                    
+                    @if(!p_boards(i).ms_clip_file.isEmpty){
+                        <a href="@routes.Application.download(fileURL(project.project_id, "ms", p_boards(i).ms_clip_file), p_boards(i).ms_clip_file)"><span class="glyphicon glyphicon-save"></span></a>
+                    }
+                    </td> 
+                }
+            </tr>
+            <tr>
+                <td>스토리보드</td>
+                @for(i <- p_boards.indices){
+                    <td>
+                    @if(!p_boards(i).sb_clip_file.isEmpty){
+                        <a href="@routes.Application.download(fileURL(project.project_id, "ms", p_boards(i).sb_clip_file), p_boards(i).sb_clip_file)"><span class="glyphicon glyphicon-save"></span></a>
+                    }
+                    </td>
+                }
+            </tr> 
+            <tr>
+                <td>과정보기</td>
+                @for(i <- p_boards.indices){
+                    <td>
+                    @if(!p_boards(i).lesson_url.isEmpty){
+                        <a href="#" class="btn btn-info btn-xs btn-product-open" _url="@p_boards(i).lesson_url" _width="@p_boards(i).lesson_width" _height="@p_boards(i).lesson_height">보기</a>
+                    }
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>신규생성일</td>
+                @for(i <- p_boards.indices){
+                    <td>
+                    @if(!p_boards(i).created_at.isEmpty){
+                        @p_boards(i).created_at
+                    }
+                    </td>
+                }
+            </tr> 
+            <tr>
+                <td>업데이트일</td>
+                @for(i <- p_boards.indices){
+                    <td>
+                    @if(!p_boards(i).updated_at.isEmpty){
+                        @p_boards(i).updated_at
+                    }
+                    </td>
+                }
+            </tr> 
+        </table>
+        
+        @if(user.user_type != "client"){
+        <div class="add-product">
+            <h4> 차시정보추가 </h4>
+            <p class="default-line"></p>
+            @helper.form(routes.Products.newProduct(project.project_id), 'id-> "product-create", 'rule -> "form", 'enctype -> "multipart/form-data"){
+                <div class="form-group">
+                    <label for="email" class="control-label"><span class="text-yellow">차시 : <span></label>
+                </div>
+                <div class="form-group">
+                    <select class="form-control input-sm">
+                        @for(i <- 1 to 30){
+                            <option>@(i)</option>
+                        }
+                    </select>
+                    <span class="help-block"> 차시를 선택해 주세요.</span>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="control-label"><span class="text-yellow">원고 : <span></label>
+                    <input class="form-control ms_name input-sm" id="disabledInput" type="text" placeholder="원고파일" disabled>
+                    <input class="ms_file hide input-sm" type="file" name="ms_file_name" id="ms_file_name">
+                    <a href="#" class="btn btn-success btn-sm ms-search btn-top-blank">찾아보기</a>
+                </div>
+                <p>
+                <div class="form-group">
+                    <label for="email" class="control-label"><span class="text-yellow">스토리보드 : </span></label>
+                    <input class="form-control sb_name input-sm" id="disabledInput" type="text" placeholder="스토리보드파일" disabled>
+                    <input class="sb_file hide input-sm" type="file" name="sb_file_name" id="sb_file_name">
+                    <a href="#" class="btn btn-success btn-sm sb-search btn-top-blank">찾아보기</a>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6">
+                       <label for="email" class="control-label"><span class="text-yellow">과정URL : <span></label>
+                       <input type="text" class="form-control input-sm" name="product_url" placeholder="과정 URL을 입력해주세요.">
+                       <span class="help-block"> ex) http://www.naver.com</span>
+                    </div>                
+                    <div class="form-group col-xs-3">
+                       <label for="email" class="control-label"><span class="text-yellow">가로 : </span></label>
+                       <input type="text" class="form-control input-sm" name="product_width" placeholder="가로">
+                    </div>
+                    <div class="form-group col-xs-3">
+                       <label for="email" class="control-label"><span class="text-yellow">세로 : </span></label>
+                       <input type="text" class="form-control input-sm" name="product_height" placeholder="세로">
+                    </div>
+                </div>
+                <div class="position-right">
+                    <button type="submit" class="btn btn-info btn-product-add">추가하기</button>
+                </div>
+            }
+        </div>
+        <div class="btn-ctrl-set">
+            
+        </div>
+        }
+    </div>
+    }
+}

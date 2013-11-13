@@ -23,7 +23,6 @@ import views._
  * Manage tasks related operations.
  */
 object Admin extends Controller with Secured {
-
 	//유저 정보 보기
 	def viewUserList(page:Long) = IsAuthenticated { user => _ =>
 		User.findByUserId(user).map
@@ -57,12 +56,7 @@ object Admin extends Controller with Secured {
 		User.findByUserId(user).map
 		{
 			user =>
-			val user_project:Seq[User] = User.findById(id)
-			user_project.map{
-				projects =>
-				val project_list:Array[String] = projects.project_id.split("|")	
-			}
-			Ok(views.html.admin.edit_user(user, User.findById(id), Project.findAllProject, project_list))
+			Ok(views.html.admin.edit_user(user, User.findById(id), Project.findAllProject))
 		}.getOrElse(Forbidden)
 	}
 

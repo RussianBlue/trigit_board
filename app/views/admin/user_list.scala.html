@@ -23,24 +23,20 @@
 	<div class="page-header">
     <h3> 사용자 목록 <small> | USER LIST</small></h3>
 	</div>
-	<table class="table table-bordered">
+	<table class="table table-bordered table-hover">
     <tr class="warning">
     		<td>번호</td>              
         <td>아이디</td>
         <td>이름</td>
-        <td>이메일</td>
-        <td>계정타입</td>
-        <td>프로젝트목록</td>
-        <td>계정관리</td>
+        <td>유저타입</td>
+        <td>유저관리</td>
     </tr>
   	@for(i <- users.indices){
 	  	<tr>
 	  		<td>@tableNumber(i)</td>
 	  		<td>@users(i).user_id</td>
 	  		<td>@users(i).name</td>
-	  		<td>@users(i).email</td>
 	  		<td>@users(i).user_type</td>
-	  		<td>@users(i).project_id</td>
 	  		<td>          
 	  			<a class="btn btn-success btn-xs" href="@routes.Admin.editUserPage(users(i).id.get)">수정</a>
     			<a class="btn btn-danger btn-xs btn-userdelete" id="@users(i).id">삭제</a>
@@ -48,12 +44,13 @@
 	  	</tr>
   	}
   </table>
+  
   <div class="btn-ctrl-set">
   	<a class="btn btn-info" href="@routes.Admin.newUserPage">신규 사용자 등록</a>
   </div>  
   @if(count > pageLength){
     <div class="board-pagenavigation">
-        <ul class="pagination">
+        <ul class="pagination pagination-sm">
             <li><a href="@prev()">Prev</a></li>
             @for(i <- 1 to totalPage()) {
                 @if(i == page){
@@ -65,5 +62,5 @@
             <li><a href="@next()">Next</a></li>
         </ul>
     </div>
-}
+  }
 }

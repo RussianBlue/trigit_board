@@ -5,6 +5,8 @@
 //페이지 타이틀 색상
 @yellow: #FFCC33;
 @light_blue: #78FEFE;
+@light_green:#94ED89;
+@light_pupple:#B49ADC;
 
 body{
 
@@ -14,9 +16,9 @@ div.page-header {
     h3{ color:@yellow; }
 }
 
-div.body-container {
-    padding-left:100px;
-    padding-right:100px;
+div#main-container {
+    padding-left:5%;
+    padding-right:5%;
 }
 
 div.top-container {
@@ -31,24 +33,63 @@ div.top-container {
    }
 }
 
+span.text-yellow{
+    color:@yellow;
+}
+
 p.text-warning.user_id{
     line-height: 30px;
     padding-left: 10px;
+}
+
+/*프로젝트 차시 추가*/
+
+#product-create {
+    div.form-group{
+      .btn-top-blank{
+        margin-top:5px;
+      }
+    }
+}
+
+div.add-product{
+    padding: 20px;
+    background: #444444;
+    border-radius: 10px;
+
+    h4{
+        margin-top:0px;
+    }
+}
+
+div#product{
+    table td{
+        text-align: center;
+    }
+
+    span.help-block{
+        color:@light_pupple;
+    }
 }
 
 /* 하단 버튼 셋트 */
 div.btn-ctrl-set{
     text-align: right;
     padding-top:10px;
+    padding-bottom:30px;
+}
+
+div.position-right{
+    text-align: right;
 }
 
 /* 페이지 네비게이션 */
 div.board-pagenavigation{
     text-align: center;
+    padding-bottom:30px;
 }
 
 /* footer */
-
 div.footer{
     nav.navbar-fixed-bottom{
         height:40px;

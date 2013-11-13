@@ -136,7 +136,7 @@ object Boards extends Controller with Secured {
             val updateDate = Some(date(curTimeFormat.format(today)))
             //첨부파일이 있는 경우
             val parent_id = project_id
-
+            
             request.body.file("clip_file_name").map {
               clip_file =>              
                 val fileName = clip_file.filename
