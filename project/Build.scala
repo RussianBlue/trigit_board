@@ -10,8 +10,8 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     jdbc,
-    anorm,
-    "mysql" % "mysql-connector-java" % "5.1.18"
+    "mysql" % "mysql-connector-java" % "5.1.18",
+    "com.typesafe.play" %% "play-slick" % "0.4.0"
   )
 
 

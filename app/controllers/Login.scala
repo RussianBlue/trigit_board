@@ -5,15 +5,23 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 
-
 import models._
 import views._
+
+import play.api.db.DB
+import play.api.Play.current
+
+import play.api.db.slick.Config.driver.simple._
+import Database.threadLocalSession
 
 
 object Login extends Controller {
   /**
    * Login page.
    */
+
+  lazy val database = Database.forDataSource(DB.getDataSource())
+
   def login = Action { implicit request =>
     Ok(views.html.signup.login(loginForm))
   }

@@ -5,8 +5,8 @@ import java.util.{Date}
 import play.api.db._
 import play.api.Play.current
 
-import anorm._
-import anorm.SqlParser._
+import play.api.db.slick.Config.driver.simple._
+import play.api.db.slick._
 
 case class Product(id:Pk[Long], 
                    project_id:String,
@@ -82,11 +82,19 @@ object Product {
     }
   }
 
+  // def findByCreateDate(id:Long):Option[Date] = {
+  //   DB.withConnection { implicit connection =>
+  //     SQL("select * from products where id = {id} created_at").on(
+  //       'id -> id
+  //     ).as(Product.simple.single)
+  //   }
+  // }
+
   def findBySameChapter(project_id:String, chapter:String):Long = {
      DB.withConnection { implicit connection =>
       SQL(
         """
-        select count(*) from products where project_id = {project_id} and chapter = {chapter}
+        select if(count(*) > 0, true, false) as val from products where project_id = {project_id} and chapter = {chapter}
         """
       ).on(
         'project_id -> project_id,

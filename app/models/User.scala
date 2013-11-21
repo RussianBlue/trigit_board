@@ -3,30 +3,28 @@ package models
 import play.api.db._
 import play.api.Play.current
 
-import anorm._
-import anorm.SqlParser._
+import play.api.db.slick.Config.driver.simple._
+import play.api.db.slick._
 
-case class User(id:Pk[Long] = NotAssigned, user_id:String, email: String, name: String, password: String, user_type:String, project_id:String)
+case class User(id:Option[Long], user_id:String, email: String, name: String, password: String, user_type:String, project_id:String)
 
-object User {
-
+object User extends Table[User]("user") {
   // -- Parsers
 
   /**
    * Parse a User from a ResultSet
    */
-  val simple = {
-      get[Pk[Long]]("user.id") ~
-      get[String]("user.user_id") ~
-      get[String]("user.email") ~
-      get[String]("user.name") ~
-      get[String]("user.password") ~
-      get[String]("user.user_type") ~
-      get[String]("user.project_id") map {
-      case id~user_id~email~name~password~user_type~project_id => User(id, user_id, email, name, password, user_type, project_id)
-    }
-  }
-  // -- Queries
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def user_id = column[String]("user_id")
+  def email = column[String]("email")
+  def name = column[String]("name")
+  def password = column[String]("password")
+  def user_type = column[String]("user_type")
+  def project_id = column[String]("project_id")
+
+  def * = id.? ~ user_id ~ email ~ name ~ password ~ user_type ~ project_id <> (User.apply _, User.unapply _)
+
+  def findAll() = for (s <- User) yield s
 
   /**
    * Retrieve a User from email.

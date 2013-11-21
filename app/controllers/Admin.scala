@@ -14,16 +14,21 @@ import play.api.libs.concurrent.Execution.Implicits._
 
 import java.io.File
 
-import anorm._
-
 import models._
 import views._
+
+import play.api.db.DB
+import play.api.Play.current
+
+import play.api.db.slick.Config.driver.simple._
+import Database.threadLocalSession
 
 /**
  * Manage tasks related operations.
  */
 object Admin extends Controller with Secured {
 	//유저 정보 보기
+
 	def viewUserList(page:Long) = IsAuthenticated { user => _ =>
 		User.findByUserId(user).map
 		{
@@ -47,7 +52,7 @@ object Admin extends Controller with Secured {
 	}
 	//신규 유저 생성
 	def newUser(user_id:String, email:String, name:String, password:String, user_type:String, project_id:String) = Action { implicit request =>		
-		val users = User.create(User(NotAssigned, user_id, email, name, password, user_type, project_id))
+		val users = User.create(User(1, user_id, email, name, password, user_type, project_id))
 		Redirect(routes.Admin.viewUserList(1))
 	}
 

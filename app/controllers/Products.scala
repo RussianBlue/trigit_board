@@ -15,8 +15,6 @@ import play.api.libs.concurrent.Execution.Implicits._
 import java.util.Calendar
 import java.io.File
 
-import anorm._
-
 import models._
 import views._
 
@@ -63,7 +61,6 @@ object Products extends Controller with Secured {
 	      var g_chapter = Product.findBySameChapter(project_id, chapter)
 
 	      Logger.info(g_chapter.toString())
-
 	      request.body.file("ms_file_name").map {
 	      	ms_file =>
 	      	msFileName = ms_file.filename
@@ -80,7 +77,7 @@ object Products extends Controller with Secured {
 
 	      if(g_chapter < 1){
 	      	val products =  Product.create(
-	        Product(NotAssigned, project_id, 1, msFileName, msFileType, sbFileName, sbFileType, project_url, project_width, project_height, createDate, updateDate)
+	        Product(NotAssigned, project_id, chapter.toLong, msFileName, msFileType, sbFileName, sbFileType, project_url, project_width, project_height, createDate, updateDate)
 	      	)
 	      }      
 	      Redirect(routes.Products.viewUserProject(project_id))

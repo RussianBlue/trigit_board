@@ -5,10 +5,10 @@ import java.util.{Date}
 import play.api.db._
 import play.api.Play.current
 
-import anorm._
-import anorm.SqlParser._
+import play.api.db.slick.Config.driver.simple._
+import play.api.db.slick._
 
-case class Board(id: Pk[Long] = NotAssigned,
+case class Board(id:Option[Long],
                  user_id: String,
                  project_id:Long,
                  board_category_id : Long,
@@ -23,7 +23,23 @@ case class Board(id: Pk[Long] = NotAssigned,
                  file_updated_at:Option[Date],
                  parent_id:Long)
 
-object Board {
+object Board extends Table[Board]("boards") {
+
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def user_id = column[String]("user_id")
+  def project_id = column[String]("email")
+  def board_category_id = column[String]("name")
+  def title = column[String]("password")
+  def body = column[String]("user_type")
+  def readings = column[String]("project_id")
+  def created_at = column[String]("user_id")
+  def updated_at = column[String]("email")
+  def file_name = column[String]("name")
+  def file_content_type = column[String]("password")
+  def file_size = column[String]("user_type")
+  def file_updated_at = column[String]("project_id")
+  def parent_id = column[String]("project_id")
+  
   val simple = {
     get[Pk[Long]]("boards.id") ~
     get[String]("boards.user_id") ~

@@ -15,8 +15,6 @@ import play.api.libs.concurrent.Execution.Implicits._
 import java.util.Calendar
 import java.io.File
 
-import anorm._
-
 import models._
 import views._
 
